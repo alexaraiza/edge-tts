@@ -1,5 +1,5 @@
 flask
-gevent
+gunicorn
 python-dotenv
 edge-tts
 emoji

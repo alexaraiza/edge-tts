@@ -1,23 +1,21 @@
 # server.py
 
 from flask import Flask, request, send_file, jsonify, Response
-from gevent.pywsgi import WSGIServer
 from dotenv import load_dotenv
 import os
 import traceback
 import json
 import base64
 
-from config import DEFAULT_CONFIGS
-from handle_text import prepare_tts_input_with_context
-from tts_handler import generate_speech, generate_speech_stream, get_models_formatted, get_voices, get_voices_formatted
-from utils import getenv_bool, require_api_key, AUDIO_FORMAT_MIME_TYPES, DETAILED_ERROR_LOGGING
+from app.config import DEFAULT_CONFIGS
+from app.handle_text import prepare_tts_input_with_context
+from app.tts_handler import generate_speech, generate_speech_stream, get_models_formatted, get_voices, get_voices_formatted
+from app.utils import getenv_bool, require_api_key, AUDIO_FORMAT_MIME_TYPES, DETAILED_ERROR_LOGGING
 
 app = Flask(__name__)
 load_dotenv()
 
 API_KEY = os.getenv('API_KEY', DEFAULT_CONFIGS["API_KEY"])
-PORT = int(os.getenv('PORT', str(DEFAULT_CONFIGS["PORT"])))
 
 DEFAULT_VOICE = os.getenv('DEFAULT_VOICE', DEFAULT_CONFIGS["DEFAULT_VOICE"])
 DEFAULT_RESPONSE_FORMAT = os.getenv('DEFAULT_RESPONSE_FORMAT', DEFAULT_CONFIGS["DEFAULT_RESPONSE_FORMAT"])
@@ -175,8 +173,8 @@ Support for ElevenLabs and Azure AI Speech
     (currently in beta)
 """
 
-# http://localhost:5050/elevenlabs/v1/text-to-speech
-# http://localhost:5050/elevenlabs/v1/text-to-speech/en-US-AndrewNeural
+# http://localhost:5000/elevenlabs/v1/text-to-speech
+# http://localhost:5000/elevenlabs/v1/text-to-speech/en-US-AndrewNeural
 @app.route('/elevenlabs/v1/text-to-speech/<voice_id>', methods=['POST'])
 @require_api_key
 def elevenlabs_tts(voice_id):
@@ -213,7 +211,7 @@ def elevenlabs_tts(voice_id):
 
 # tts.speech.microsoft.com/cognitiveservices/v1
 # https://{region}.tts.speech.microsoft.com/cognitiveservices/v1
-# http://localhost:5050/azure/cognitiveservices/v1
+# http://localhost:5000/azure/cognitiveservices/v1
 @app.route('/azure/cognitiveservices/v1', methods=['POST'])
 @require_api_key
 def azure_tts():
@@ -249,14 +247,3 @@ def azure_tts():
 
     # Return the generated audio file
     return send_file(output_file_path, mimetype="audio/mpeg", as_attachment=True, download_name="speech.mp3")
-
-print(f" Edge TTS (Free Azure TTS) Replacement for OpenAI's TTS API")
-print(f" ")
-print(f" * Serving OpenAI Edge TTS")
-print(f" * Server running on http://localhost:{PORT}")
-print(f" * TTS Endpoint: http://localhost:{PORT}/v1/audio/speech")
-print(f" ")
-
-if __name__ == '__main__':
-    http_server = WSGIServer(('0.0.0.0', PORT), app)
-    http_server.serve_forever()

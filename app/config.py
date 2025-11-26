@@ -2,7 +2,6 @@
 
 DEFAULT_CONFIGS = {
     # Server settings
-    "PORT": 5050,
     "API_KEY": 'your_api_key_here',  # Fallback API key
 
     # TTS settings

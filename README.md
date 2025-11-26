@@ -30,10 +30,10 @@ This project provides a local, OpenAI-compatible text-to-speech (TTS) API using 
 The simplest way to get started without having to configure anything is to run the command below
 
 ```bash
-docker run -d -p 5050:5050 travisvn/openai-edge-tts:latest
+docker run -d -p 5000:5000 travisvn/openai-edge-tts:latest
 ```
 
-This will run the service at port 5050 with all the default configs
+This will run the service at port 5000 with all the default configs
 
 _(Docker required, obviously)_
 
@@ -58,7 +58,6 @@ cd openai-edge-tts
 
 ```
 API_KEY=your_api_key_here
-PORT=5050
 
 DEFAULT_VOICE=en-US-AvaNeural
 DEFAULT_RESPONSE_FORMAT=mp3
@@ -117,7 +116,7 @@ This is controlled by the `INSTALL_FFMPEG_ARG` build argument. Set this environm
 This is for local builds. For pre-built Docker Hub images, add the `latest-ffmpeg` tag to the version
 
 ```bash
-docker run -d -p 5050:5050 -e API_KEY=your_api_key_here -e PORT=5050 travisvn/openai-edge-tts:latest-ffmpeg
+docker run -d -p 5000:5000 -e API_KEY=your_api_key_here -e PORT=5000 travisvn/openai-edge-tts:latest-ffmpeg
 ```
 
 ---
@@ -128,16 +127,16 @@ Alternatively, **run directly with Docker**:
 
 ```bash
 docker build -t openai-edge-tts .
-docker run -p 5050:5050 --env-file .env openai-edge-tts
+docker run -p 5000:5000 --env-file .env openai-edge-tts
 ```
 
 To run the container in the background, add `-d` after the `docker run` command:
 
 ```bash
-docker run -d -p 5050:5050 --env-file .env openai-edge-tts
+docker run -d -p 5000:5000 --env-file .env openai-edge-tts
 ```
 
-4. **Access the API**: Your server will be accessible at `http://localhost:5050`.
+4. **Access the API**: Your server will be accessible at `http://localhost:5000`.
 
 <details>
 <summary>
@@ -183,7 +182,6 @@ Create a `.env` file in the root directory and set the following variables:
 
 ```plaintext
 API_KEY=your_api_key_here
-PORT=5050
 
 DEFAULT_VOICE=en-US-AvaNeural
 DEFAULT_RESPONSE_FORMAT=mp3
@@ -205,11 +203,11 @@ Once configured, start the server with:
 python app/server.py
 ```
 
-The server will start running at `http://localhost:5050`.
+The server will start running at `http://localhost:5000`.
 
 ### 6. Test the API
 
-You can now interact with the API at `http://localhost:5050/v1/audio/speech` and other available endpoints. See the [Usage](#usage) section for request examples.
+You can now interact with the API at `http://localhost:5000/v1/audio/speech` and other available endpoints. See the [Usage](#usage) section for request examples.
 
 </details>
 
@@ -243,7 +241,7 @@ Generates audio from the input text. Available parameters:
 Example request with `curl` and saving the output to an mp3 file:
 
 ```bash
-curl -X POST http://localhost:5050/v1/audio/speech \
+curl -X POST http://localhost:5000/v1/audio/speech \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer your_api_key_here" \
   -d '{
@@ -260,7 +258,7 @@ curl -X POST http://localhost:5050/v1/audio/speech \
 You can pipe the audio directly to `ffplay` for immediate playback, just like OpenAI's API:
 
 ```bash
-curl -X POST http://localhost:5050/v1/audio/speech \
+curl -X POST http://localhost:5000/v1/audio/speech \
   -H "Authorization: Bearer your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -274,7 +272,7 @@ curl -X POST http://localhost:5050/v1/audio/speech \
 Or for immediate playback without saving to file:
 
 ```bash
-curl -X POST http://localhost:5050/v1/audio/speech \
+curl -X POST http://localhost:5000/v1/audio/speech \
   -H "Authorization: Bearer your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -286,7 +284,7 @@ curl -X POST http://localhost:5050/v1/audio/speech \
 Or, to be in line with the OpenAI API endpoint parameters:
 
 ```bash
-curl -X POST http://localhost:5050/v1/audio/speech \
+curl -X POST http://localhost:5000/v1/audio/speech \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer your_api_key_here" \
   -d '{
@@ -302,7 +300,7 @@ curl -X POST http://localhost:5050/v1/audio/speech \
 For applications that need structured streaming events (like web applications), use SSE format:
 
 ```bash
-curl -X POST http://localhost:5050/v1/audio/speech \
+curl -X POST http://localhost:5000/v1/audio/speech \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer your_api_key_here" \
   -d '{
@@ -329,7 +327,7 @@ Example using fetch API for SSE streaming:
 
 ```javascript
 async function streamTTSWithSSE(text) {
-  const response = await fetch('http://localhost:5050/v1/audio/speech', {
+  const response = await fetch('http://localhost:5000/v1/audio/speech', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -400,7 +398,7 @@ streamTTSWithSSE('Hello from SSE streaming!');
 And an example of a language other than English:
 
 ```bash
-curl -X POST http://localhost:5050/v1/audio/speech \
+curl -X POST http://localhost:5000/v1/audio/speech \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer your_api_key_here" \
   -d '{
@@ -417,7 +415,7 @@ Example using fetch API for SSE streaming:
 
 ```javascript
 async function streamTTSWithSSE(text) {
-  const response = await fetch('http://localhost:5050/v1/audio/speech', {
+  const response = await fetch('http://localhost:5000/v1/audio/speech', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -516,7 +514,7 @@ Below, you can see a screenshot of the correct configuration for using this proj
 
 ![Screenshot of Open WebUI Admin Settings for Audio adding the correct endpoints for this project](https://utfs.io/f/MMMHiQ1TQaBo9GgL4WcUbjSRlqi86sV3TXh47KYBJCkdQ20M)
 
-If you're running both Open WebUI and this project in Docker, the API endpoint URL is probably `http://host.docker.internal:5050/v1`
+If you're running both Open WebUI and this project in Docker, the API endpoint URL is probably `http://host.docker.internal:5000/v1`
 
 > [!NOTE]
 > View the official docs for [Open WebUI integration with OpenAI Edge TTS](https://docs.openwebui.com/tutorials/text-to-speech/openai-edge-tts-integration)
@@ -539,7 +537,7 @@ Below, you can see a screenshot of the correct configuration for using this proj
 - The quickest way to get this up and running is to install docker and run the command below:
 
 ```bash
-docker run -d -p 5050:5050 -e API_KEY=your_api_key_here -e PORT=5050 travisvn/openai-edge-tts:latest
+docker run -d -p 5000:5000 -e API_KEY=your_api_key_here -e PORT=5000 travisvn/openai-edge-tts:latest
 ```
 
 ---

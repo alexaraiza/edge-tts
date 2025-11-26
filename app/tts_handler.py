@@ -7,8 +7,8 @@ import subprocess
 import os
 from pathlib import Path
 
-from utils import DETAILED_ERROR_LOGGING
-from config import DEFAULT_CONFIGS
+from app.utils import DETAILED_ERROR_LOGGING
+from app.config import DEFAULT_CONFIGS
 
 # Language default (environment variable)
 DEFAULT_LANGUAGE = os.getenv('DEFAULT_LANGUAGE', DEFAULT_CONFIGS["DEFAULT_LANGUAGE"])

@@ -5,7 +5,7 @@ from functools import wraps
 import os
 from dotenv import load_dotenv
 
-from config import DEFAULT_CONFIGS
+from app.config import DEFAULT_CONFIGS
 
 load_dotenv()
 
